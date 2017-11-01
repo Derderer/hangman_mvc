@@ -1,0 +1,84 @@
+﻿@using hangman_mvc.App_Code;
+@using hangman_mvc.Models;
+
+@model HangmanModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h2>@ViewBag.Title</h2>
+    <h3>@ViewBag.Message</h3>
+
+
+    @using (Html.BeginForm("guess", "Hangman"))
+    {
+        @Html.ValidationSummary()
+
+        if (Model.WrongGuessCount >= 7)
+        {
+            @Html.Label("YOU LOST !!!")
+        }
+        if (Model.CorrectGuessCount == Model.WinningWord.Length)
+        {
+            @Html.Label("YOU WON !!!")
+        }
+
+        <div class="hangmanheight">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td></td>
+                    <td>@Html.Image("/Images/hangman_head.png", "", "75", "75", Model.HeadHidden)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>@Html.Image("/Images/hangman_left_arm.png", "", "75", "75", Model.LeftArmHidden)</td>
+                    <td>@Html.Image("/Images/hangman_body.png", "", "75", "75", Model.TopBodyHidden)</td>
+                    <td>@Html.Image("/Images/hangman_right_arm.png", "", "75", "75", Model.RightArmHidden)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.Image("/Images/hangman_body.png", "", "75", "75", Model.BottomBodyHidden)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>@Html.Image("/Images/hangman_left_leg.png", "", "75", "75", Model.LeftLegHidden)</td>
+                    <td></td>
+                    <td>@Html.Image("/Images/hangman_right_leg.png", "", "75", "75", Model.RightLegHidden)</td>
+                </tr>
+
+
+            </table>
+        </div>
+
+
+        <br />
+
+
+        @Html.Label(Model.DisplayWordString)
+        
+        <br />
+        @Html.Label(Model.WrongGuesses)
+        
+        <br />
+        @Html.TextBox("guess", Model.GuessedLetter)
+
+        <br />
+        <br />
+        <br />
+        if (Model.CorrectGuessCount < Model.WinningWord.Length && (Model.WrongGuessCount < 7))
+        {
+            @Html.FormSubmit("submit", "submit", "Guess Letter");
+        }
+        else
+        {
+            @Html.Label(Model.WinningWord)
+            <br/>
+            @Html.ActionLink("Play Again!", "Index", "Hangman", new { area = "" }, new { @class = "navbar-brand" })
+            <br />
+        }
+    }
+</div>
+
